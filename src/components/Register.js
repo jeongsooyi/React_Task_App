@@ -2,18 +2,31 @@ import React, { Component } from "react";
 import { Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-class Login extends Component {
+class Register extends Component {
   constructor(){
-    super()
+    super();
     this.state = {
       id: "",
       password: "",
+      confirmPassword: "",
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-}
-  handleSubmit(event){
+  }
+  
 
+  handleSubmit(event){
+    console.log("Register API call")
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify(this.state)
+    }
+    fetch('https://localhost:44334/api/auth/register', requestOptions)
+      .then(response => response.json())
+      .then((response) => {
+        const Status = response;
+        console.log(Status);
+      });
   }
 
   handleChange(event) {
@@ -31,9 +44,9 @@ class Login extends Component {
     return (
       <main>
         <div className="container">
-          <h1> Login </h1>
+          <h1> Register </h1>
           <br />
-          <Form className="login-form" onSubmit={this.handleSubmit}>
+          <Form className="register-form" onSubmit= {this.handleSubmit}>
             <Form.Group controlId="formBasicEmail">
               <Form.Label> Email address </Form.Label>
               <Form.Control
@@ -54,19 +67,29 @@ class Login extends Component {
                 onChange={this.handleChange}
               />
             </Form.Group>
+            <Form.Group controlId="formBasicConfirmPassword">
+              <Form.Label> Confirm Password </Form.Label>
+              <Form.Control
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                value={this.state.confirmPassword}
+                onChange={this.handleChange}
+              />
+            </Form.Group>
             <Button variant="primary" type="submit">
-              Login
+              Register
             </Button>
+            <Link to="/login">
+              <Button>Back</Button>
+            </Link>
           </Form>
           <br />
           <br />
-          <h5>
-            Don't have an account? <Link to='/register'>Register</Link>{" "}
-          </h5>
         </div>
       </main>
     );
   }
 }
 
-export default Login;
+export default Register;
